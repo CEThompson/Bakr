@@ -16,6 +16,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    android {
+        compileOptions {
+            sourceCompatibility 1.8
+            targetCompatibility 1.8
+        }
+    }
 }
 
 dependencies {
@@ -47,6 +53,9 @@ dependencies {
 
     // Exo player
     implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
+
+    // Logger
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
 
 }
