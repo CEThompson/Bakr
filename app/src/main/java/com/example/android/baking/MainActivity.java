@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getRecipes();
+        //getRecipes();
     }
 
     private void getRecipes(){
@@ -48,4 +48,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    /*
+    public interface OnRecipeResult {
+        void onRecipe
+    }
+    */
 }
