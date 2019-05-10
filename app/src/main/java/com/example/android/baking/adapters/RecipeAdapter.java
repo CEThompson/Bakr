@@ -14,6 +14,8 @@ import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.data.Step;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdapterViewHolder> {
@@ -29,12 +31,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     public class RecipeAdapterViewHolder extends RecyclerView.ViewHolder implements
     View.OnClickListener{
-        private final TextView mName;
-
+        @BindView(R.id.recipe_name) TextView mName;
 
         public RecipeAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
-            mName = itemView.findViewById(R.id.recipe_name);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -42,7 +44,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
             int position = getAdapterPosition();
             Recipe clickedRecipe = mRecipeData[position];
             mClickHandler.onClick(clickedRecipe);
-
+            Timber.d("clicking position " + position);
         }
     }
 
