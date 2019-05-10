@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Baking</string>
+
+
+    <string name="next_button">Next step button</string>
+    <string name="prev_button">Previous step button</string>
+    <string name="step_thumbnail">Thumbnail image for recipe step.</string>
+
 </resources>

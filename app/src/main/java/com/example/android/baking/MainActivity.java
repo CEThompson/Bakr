@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements
     public void onRecipeSelected(Recipe recipe) {
         // Set the recipe information for the fragment
         mSelectStepFragment.setRecipe(recipe);
+
+        // Send all steps for fragment step navigation
+        mViewStepFragment.setSteps(recipe.getSteps());
+
+        // Swap out the fragment
         mFragmentManager.beginTransaction()
                 .replace(R.id.main_activity_fragment_container, mSelectStepFragment)
                 .addToBackStack(null)
@@ -66,8 +71,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onStepSelected(Step step) {
-        // TODO handle step selection
+    public void onStepSelected(int position) {
+        // Send the selected position to the fragment
+        mViewStepFragment.setStepPosition(position);
+
+        // Swap out the fragment
+        mFragmentManager.beginTransaction()
+                .replace(R.id.main_activity_fragment_container, mViewStepFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 }

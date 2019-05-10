@@ -4,14 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.baking.R;
-import com.example.android.baking.data.Ingredient;
-import com.example.android.baking.data.Recipe;
 import com.example.android.baking.data.Step;
 
 import butterknife.BindView;
@@ -24,7 +24,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
     private final StepOnClickHandler mClickHandler;
 
     public interface StepOnClickHandler{
-        void onClick(Step clickedStep);
+        void onClick(int position);
     }
 
     public StepAdapter(StepOnClickHandler handler){ mClickHandler = handler; }
@@ -34,8 +34,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
         @BindView(R.id.step_id) TextView mId;
         @BindView(R.id.step_short_description) TextView mShortDescription;
         @BindView(R.id.step_description) TextView mDescription;
-        @BindView(R.id.thumbnail_URL) TextView mThumbnailURL;
-        @BindView(R.id.video_URL) TextView mVideoURL;
+        @BindView(R.id.thumbnail) ImageView mThumbnail;
+        //@BindView(R.id.video_URL) TextView mVideoURL;
 
         public StepAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -46,8 +46,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Step clickedStep = mStepData[position];
-            mClickHandler.onClick(clickedStep);
+            //Step clickedStep = mStepData[position];
+            mClickHandler.onClick(position);
             Timber.d("clicking position " + position);
         }
     }
@@ -72,13 +72,23 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
         String shortDescription = currentStep.getShortDescription();
         String description = currentStep.getDescription();
         String thumbnailURL = currentStep.getThumbnailURL();
-        String videoURL = currentStep.getVideoURL();
+        //String videoURL = currentStep.getVideoURL();
 
         holder.mId.setText(String.valueOf(id));
         holder.mShortDescription.setText(shortDescription);
         holder.mDescription.setText(description);
-        holder.mThumbnailURL.setText(thumbnailURL);
-        holder.mVideoURL.setText(videoURL);
+
+        if (thumbnailURL.isEmpty()){
+
+        } else {
+            Glide.with(holder.mThumbnail.getContext())
+                    .load(thumbnailURL)
+                    .into(holder.mThumbnail);
+        }
+
+
+        //holder.mThumbnail.setText(thumbnailURL);
+        //holder.mVideoURL.setText(videoURL);
     }
 
     @Override

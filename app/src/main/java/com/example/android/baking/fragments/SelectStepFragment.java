@@ -36,7 +36,7 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     private Recipe mRecipe;
 
     public interface OnStepClickListener {
-        void onStepSelected(Step step);
+        void onStepSelected(int position);
     }
 
     @Override
@@ -86,8 +86,8 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     }
 
     @Override
-    public void onClick(Step clickedStep) {
-        mCallback.onStepSelected(clickedStep);
+    public void onClick(int position) {
+        mCallback.onStepSelected(position);
         Timber.d("selecting step");
     }
 
