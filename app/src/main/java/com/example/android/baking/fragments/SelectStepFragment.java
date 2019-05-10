@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import com.example.android.baking.adapters.StepAdapter;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.data.Step;
 
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -25,6 +28,8 @@ import timber.log.Timber;
 public class SelectStepFragment extends Fragment implements StepAdapter.StepOnClickHandler{
 
     @BindView(R.id.step_recyclerview) RecyclerView mStepRecyclerView;
+    @BindView(R.id.ingredients_textview) TextView mIngredientsTv;
+
     StepAdapter mStepAdapter;
     OnStepClickListener mCallback;
 
@@ -72,6 +77,11 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     @Override
     public void onResume() {
         super.onResume();
+
+        // Display ingredients
+        mIngredientsTv.setText(Arrays.toString(mRecipe.getIngredients()));
+
+        // Set the data for the steps and display
         mStepAdapter.setmRecipeData(mRecipe.getSteps());
     }
 
