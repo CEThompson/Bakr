@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Baking</string>
 
-
+    <!-- Buttons -->
     <string name="next_button">Next step button</string>
     <string name="prev_button">Previous step button</string>
+
+    <!-- Content descriptions -->
     <string name="step_thumbnail">Thumbnail image for recipe step.</string>
+
+    <!-- Errors -->
+    <string name="recipe_error">Error loading recipes.</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,9 +30,9 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
 
     @BindView(R.id.step_recyclerview) RecyclerView mStepRecyclerView;
     @BindView(R.id.ingredients_textview) TextView mIngredientsTv;
-
     StepAdapter mStepAdapter;
     OnStepClickListener mCallback;
+
 
     private Recipe mRecipe;
 
@@ -94,4 +95,7 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     public void setRecipe(Recipe recipe){
         mRecipe = recipe;
     }
+
+
+
 }

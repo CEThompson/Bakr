@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,8 +30,10 @@ import timber.log.Timber;
 public class SelectRecipeFragment extends Fragment implements RecipeAdapter.RecipeAdapterOnClickHandler {
 
     @BindView(R.id.recipe_recyclerview) RecyclerView mRecipeRecyclerView;
-    RecipeAdapter mRecipeAdapter;
-    OnRecipeClickListener mCallback;
+    @BindView(R.id.select_recipe_progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.recipe_errorview) TextView mErrorView;
+    private RecipeAdapter mRecipeAdapter;
+    private OnRecipeClickListener mCallback;
 
     public interface OnRecipeClickListener {
         void onRecipeSelected(Recipe recipe);
@@ -68,34 +72,50 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
         // Set the adapter on the recycler view
         mRecipeRecyclerView.setAdapter(mRecipeAdapter);
 
+        // Async call to get recipe data
         getRecipes();
     }
 
+    /* Async retrofit call gets the recipes as a json object and turns them into relevant objects */
     private void getRecipes(){
         GetRecipesService recipesService = NetworkUtils.getRetrofitInstance().create(GetRecipesService.class);
         Call<Recipe[]> call = recipesService.getRecipes();
         call.enqueue(new Callback<Recipe[]>() {
+            /* Success hides irrelevant views, sets the adapter data, and logs */
             @Override
             public void onResponse(Call<Recipe[]> call, Response<Recipe[]> response) {
-                // TODO set list fragment data here
                 mRecipeAdapter.setmRecipeData(response.body());
-                Timber.d("retrofit success");
-                Timber.d("Recipe[] length is " + String.valueOf(response.body().length));
+                showRecipes();
+                Timber.d("Retrofit success, Recipe[] length is %s.", response.body().length);
             }
-
+            /* Failure shows the error message and logs */
             @Override
             public void onFailure(Call<Recipe[]> call, Throwable t) {
-                // TODO display failure here
-                Timber.d("retrofit failure");
+                showError();
+                Timber.d("Retrofit failure, message is: %s.", t.getMessage());
             }
         });
     }
 
+    /* sends the selected recipe to main activity */
     @Override
     public void onClick(Recipe clickedRecipe) {
-        // TODO handle recipe onclick
         mCallback.onRecipeSelected(clickedRecipe);
         Timber.d("click logging in select recipe fragment");
+    }
+
+    /* Shows the recipes */
+    private void showRecipes(){
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mRecipeRecyclerView.setVisibility(View.VISIBLE);
+        mErrorView.setVisibility(View.INVISIBLE);
+    }
+
+    /* Shows the error view */
+    private void showError(){
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mRecipeRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorView.setVisibility(View.VISIBLE);
     }
 
 }
