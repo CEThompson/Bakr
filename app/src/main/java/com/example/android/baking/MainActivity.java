@@ -1,5 +1,8 @@
 package com.example.android.baking;
 
+import android.app.NotificationManager;
+import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements
     private SelectStepFragment mSelectStepFragment;
     private SelectRecipeFragment mSelectRecipeFragment;
     private ViewStepFragment mViewStepFragment;
+
+    // TODO implement media session
+    private MediaSession mMediaSession;
+    private NotificationManager mNotificationManager;
+    private PlaybackState.Builder mStateBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
