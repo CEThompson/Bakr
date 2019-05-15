@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.baking.R;
-import com.example.android.baking.adapters.RecipeAdapter;
 import com.example.android.baking.adapters.StepAdapter;
 import com.example.android.baking.data.Recipe;
-import com.example.android.baking.data.Step;
 
 import java.util.Arrays;
 

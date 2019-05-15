@@ -15,6 +15,8 @@ import com.example.android.baking.fragments.SelectRecipeFragment;
 import com.example.android.baking.fragments.SelectStepFragment;
 import com.example.android.baking.fragments.ViewStepFragment;
 import com.example.android.baking.utils.DeviceUtils;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
 
 import timber.log.Timber;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements
     private ViewStepFragment mViewStepFragment;
 
     // TODO implement media session
+    private ExoPlayer mExoPlayer;
     private MediaSession mMediaSession;
     private NotificationManager mNotificationManager;
     private PlaybackState.Builder mStateBuilder;

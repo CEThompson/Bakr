@@ -2,6 +2,7 @@ package com.example.android.baking.fragments;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.android.baking.R;
-import com.example.android.baking.adapters.StepAdapter;
-import com.example.android.baking.data.Recipe;
 import com.example.android.baking.data.Step;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
-import java.util.Arrays;
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,17 +72,68 @@ public class ViewStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         updateUI();
+        initializePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    private void initializePlayer(){
+        if (mExoPlayer == null){
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext());
+
+            mMediaPlayerView.setPlayer(mExoPlayer);
+            mExoPlayer.setPlayWhenReady(true);
+            //mExoPlayer.seekTo(currentWindow, playbackPosition);
+            updatePlayer();
+        }
 
     }
 
-    public void setSteps(Step[] steps){mSteps = steps;}
+    private void releasePlayer(){
+        if (mExoPlayer!=null){
+            //playbackPosition = mExoPlayer.getCurrentPosition();
+            //currentWindow = player.getCurrentWindowIndex();
+            //playWhenRead = player.getPlayWhenReady();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+    }
+
+    private void updatePlayer(){
+        if (mExoPlayer!=null) {
+            String URL = mStep.getVideoURL();
+            String thumbnail = mStep.getThumbnailURL();
+
+            if (!URL.equals("")) {
+                MediaSource mediaSource = buildMediaSource(Uri.parse(URL));
+                mExoPlayer.prepare(mediaSource, true, false);
+            } else if (!thumbnail.equals("")){
+                MediaSource mediaSource = buildMediaSource(Uri.parse(thumbnail));
+                mExoPlayer.prepare(mediaSource, true, false);
+            } else {
+                // TODO set to drawable?
+            }
+        }
+    }
+
+    private MediaSource buildMediaSource(Uri uri){
+        return new ExtractorMediaSource.Factory(
+                new DefaultHttpDataSourceFactory("exoplayer-codelab"))
+                .createMediaSource(uri);
+
+    }
+
+    public void setSteps(Step[] steps){
+        mSteps = steps; }
 
     public void setStepPosition(int position){
         mStepPosition = position;
-        setStep();
-    }
+        setStep(); }
 
     private void setStep(){mStep = mSteps[mStepPosition]; }
 
@@ -118,55 +162,16 @@ public class ViewStepFragment extends Fragment {
         String thumbnailURL = mStep.getThumbnailURL();
         String videoURL = mStep.getVideoURL();
 
+        updatePlayer();
+
         Toast toast;
+        String toastText = "desc: ";
         if (!videoURL.equals(""))
-            toast = Toast.makeText(getActivity(), "videoURL:"+videoURL, Toast.LENGTH_SHORT);
-        else if (!thumbnailURL.equals(""))
-            toast = Toast.makeText(getActivity(), "thumbnailURL:"+thumbnailURL, Toast.LENGTH_SHORT);
-        else
-            toast = Toast.makeText(getActivity(), "no video or thumbnail", Toast.LENGTH_SHORT);
+            toastText += "+video";
+        if (!thumbnailURL.equals(""))
+            toastText += "+thumb";
 
+        toast = Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT);
         toast.show();
-
-        // Set up image
-        /*
-        if (videoURL.isEmpty()) {
-            Glide.with(this)
-                    .load(thumbnailURL)
-                    .into(new CustomTarget<Drawable>() {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                            mMediaPlayerView.setDefaultArtwork(resource);
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                            mMediaPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.ic_error_black_24dp));
-                        }
-                    });
-        }
-        // Set up video
-        else {
-            // TODO set up video
-            Glide.with(this)
-                    .load(thumbnailURL)
-                    .into(new CustomTarget<Drawable>() {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                            mMediaPlayerView.setDefaultArtwork(resource);
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                            mMediaPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.ic_error_black_24dp));
-                        }
-                    });
-        }
-        */
-        // TODO set buttons
     }
-
-
-
-
 }
