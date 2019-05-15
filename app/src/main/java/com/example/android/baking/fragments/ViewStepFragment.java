@@ -1,15 +1,11 @@
 package com.example.android.baking.fragments;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +21,8 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
-import java.net.URL;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class ViewStepFragment extends Fragment {
 
@@ -43,6 +36,8 @@ public class ViewStepFragment extends Fragment {
     private int mStepPosition;
 
     private ExoPlayer mExoPlayer;
+
+    //TODO handle rotation
 
     @Nullable
     @Override
@@ -87,6 +82,8 @@ public class ViewStepFragment extends Fragment {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext());
 
             mMediaPlayerView.setPlayer(mExoPlayer);
+            // TODO set default drawable
+            //mMediaPlayerView.setDefaultArtwork();
             mExoPlayer.setPlayWhenReady(true);
             //mExoPlayer.seekTo(currentWindow, playbackPosition);
             updatePlayer();
@@ -109,6 +106,8 @@ public class ViewStepFragment extends Fragment {
             String URL = mStep.getVideoURL();
             String thumbnail = mStep.getThumbnailURL();
 
+            mExoPlayer.stop();
+
             if (!URL.equals("")) {
                 MediaSource mediaSource = buildMediaSource(Uri.parse(URL));
                 mExoPlayer.prepare(mediaSource, true, false);
@@ -116,7 +115,9 @@ public class ViewStepFragment extends Fragment {
                 MediaSource mediaSource = buildMediaSource(Uri.parse(thumbnail));
                 mExoPlayer.prepare(mediaSource, true, false);
             } else {
-                // TODO set to drawable?
+                //mExoPlayer.release();
+                // TODO handle no video or thumbnail
+                //mMediaPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.exo_controls_pause));
             }
         }
     }
@@ -155,10 +156,10 @@ public class ViewStepFragment extends Fragment {
     }
 
     private void updateUI(){
-        // TODO set media player content
+        // Set the description
         mInstructionTextView.setText(mStep.getDescription());
 
-        //mMediaPlayerView.setDefaultArtwork();
+        // Get the urls
         String thumbnailURL = mStep.getThumbnailURL();
         String videoURL = mStep.getVideoURL();
 
@@ -170,7 +171,6 @@ public class ViewStepFragment extends Fragment {
             toastText += "+video";
         if (!thumbnailURL.equals(""))
             toastText += "+thumb";
-
         toast = Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT);
         toast.show();
     }
