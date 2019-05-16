@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.baking.R;
+import com.example.android.baking.RecipeActivity;
 import com.example.android.baking.adapters.IngredientAdapter;
 import com.example.android.baking.adapters.StepAdapter;
-import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
 
 import butterknife.BindView;
@@ -26,14 +24,13 @@ import timber.log.Timber;
 
 public class SelectStepFragment extends Fragment implements StepAdapter.StepOnClickHandler{
 
-    @BindView(R.id.step_recyclerview) RecyclerView mStepRecyclerView;
+    @BindView(R.id.step_recyclerview)
+    RecyclerView mStepRecyclerView;
     @BindView(R.id.ingredients_listview)
     RecyclerView mIngredientsRecyclerView;
-    StepAdapter mStepAdapter;
-    IngredientAdapter mIngredientAdapter;
-    OnStepClickListener mCallback;
-
-
+    private StepAdapter mStepAdapter;
+    private IngredientAdapter mIngredientAdapter;
+    private OnStepClickListener mCallback;
     private Recipe mRecipe;
 
     public interface OnStepClickListener {
@@ -62,6 +59,10 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Restore
+        if (savedInstanceState!= null){
+            mRecipe = savedInstanceState.getParcelable(RecipeActivity.RECIPE_KEY);
+        }
         /* Set the data for the steps */
         // Create and set layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
@@ -103,6 +104,9 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
         mRecipe = recipe;
     }
 
-
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(RecipeActivity.RECIPE_KEY, mRecipe);
+    }
 }

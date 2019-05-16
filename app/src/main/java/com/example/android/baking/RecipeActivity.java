@@ -1,12 +1,10 @@
 package com.example.android.baking;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,47 +28,52 @@ public class RecipeActivity extends AppCompatActivity implements
     @BindView(R.id.recipe_errorview)
     TextView mErrorView;
 
-    private FragmentManager mFragmentManager;
     private SelectRecipeFragment mSelectRecipeFragment;
 
     public static final String RECIPE_KEY = "recipe";
+    public static final String SELECT_RECIPE_FRAGMENT_KEY = "select_recipe_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        // Set up Timber
-        if (BuildConfig.DEBUG){
-            Timber.plant(new Timber.DebugTree());
+        if (savedInstanceState!=null){
+            mSelectRecipeFragment = (SelectRecipeFragment) getSupportFragmentManager()
+                    .getFragment(savedInstanceState, SELECT_RECIPE_FRAGMENT_KEY);
+            Timber.d("restoring select recipe fragment %s", mSelectRecipeFragment.getId());
         }
 
-        // Set to landscape orientation for tablets
-        if(getResources().getBoolean(R.bool.is_tablet)){
+        // Set up Timber
+        if (BuildConfig.DEBUG){
+            if (savedInstanceState==null) // only plant one debug tree
+                Timber.plant(new Timber.DebugTree());
+        }
+
+        // Set screen orientation for tablet
+        if(getResources().getBoolean(R.bool.is_600_wide)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
         // Create fragments
-        if (mFragmentManager == null) mFragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (mSelectRecipeFragment == null) mSelectRecipeFragment = new SelectRecipeFragment();
-
-        mFragmentManager.beginTransaction()
+        fragmentManager.beginTransaction()
                 .replace(R.id.main_activity_fragment_container, mSelectRecipeFragment)
                 .commit();
 
     }
 
-    // TODO select recipe
     @Override
     public void onRecipeSelected(Recipe recipe) {
         Intent intent = new Intent(this, StepsActivity.class);
-        // Send the recipe
-        intent.putExtra(RECIPE_KEY, recipe);
-
+        intent.putExtra(RECIPE_KEY, recipe); // Send the recipe in bundle
         startActivity(intent);
-        // TODO send the recipe to the activity
-
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, SELECT_RECIPE_FRAGMENT_KEY, mSelectRecipeFragment);
+    }
 }

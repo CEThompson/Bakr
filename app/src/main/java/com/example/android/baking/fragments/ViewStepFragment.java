@@ -37,29 +37,35 @@ public class ViewStepFragment extends Fragment {
 
     private ExoPlayer mExoPlayer;
 
-    //TODO handle rotation
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_step, container, false);
         ButterKnife.bind(this, view);
 
-        // Set back button
-        mNextStepButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nextStep();
-            }
-        });
+        // If tablet get rid of next buttons
+        if (getResources().getBoolean(R.bool.is_600_wide)) {
+            mNextStepButton.setVisibility(View.GONE);
+            mPreviousStepButton.setVisibility(View.GONE);
+        }
+        // If not tablet set listeners on the buttons
+        else {
+            // Set back button
+            mNextStepButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    nextStep();
+                }
+            });
 
-        // Set next button
-        mPreviousStepButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                previousStep();
-            }
-        });
+            // Set next button
+            mPreviousStepButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    previousStep();
+                }
+            });
+        }
 
         return view;
     }
@@ -158,13 +164,9 @@ public class ViewStepFragment extends Fragment {
     public void updateUI(){
         // Set the description
         mInstructionTextView.setText(mStep.getDescription());
-
-        // Get the urls
-        String thumbnailURL = mStep.getThumbnailURL();
-        String videoURL = mStep.getVideoURL();
-
         updatePlayer();
 
+        /*
         Toast toast;
         String toastText = "desc: ";
         if (!videoURL.equals(""))
@@ -173,5 +175,6 @@ public class ViewStepFragment extends Fragment {
             toastText += "+thumb";
         toast = Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT);
         toast.show();
+        */
     }
 }
