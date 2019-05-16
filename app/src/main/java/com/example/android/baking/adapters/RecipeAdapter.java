@@ -1,6 +1,7 @@
 package com.example.android.baking.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +23,22 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     private Recipe[] mRecipeData;
     private final RecipeAdapterOnClickHandler mClickHandler;
+    private Context mContext;
+
 
     public interface RecipeAdapterOnClickHandler{
         void onClick(Recipe clickedRecipe);
     }
 
-    public RecipeAdapter(RecipeAdapterOnClickHandler handler){ mClickHandler = handler; }
+    public RecipeAdapter(RecipeAdapterOnClickHandler handler, Context context){
+        mClickHandler = handler;
+        mContext = context;
+    }
 
     public class RecipeAdapterViewHolder extends RecyclerView.ViewHolder implements
     View.OnClickListener{
-        @BindView(R.id.recipe_name) TextView mName;
-
+        @BindView(R.id.recipe_name_tv) TextView mName;
+        @BindView(R.id.servings_tv) TextView mServings;
         public RecipeAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -62,20 +68,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     @Override
     public void onBindViewHolder(@NonNull RecipeAdapterViewHolder holder, int position) {
+        // Get relevant info
         Recipe currentRecipe = mRecipeData[position];
-
-        int id = currentRecipe.getId();
         String name = currentRecipe.getName();
-        Ingredient[] ingredients = currentRecipe.getIngredients();
-        Step[] steps = currentRecipe.getSteps();
         int servings = currentRecipe.getServings();
-        String image = currentRecipe.getImage();
 
-        String information = "ID: " + String.valueOf(id) + " "
-                + "Name: " + name + " "
-                + "Servings: " + servings + " "
-                + "Image: " + image;
-        holder.mName.setText(information);
+        // Build the message for how many the recipe serves
+        String serveString = mContext.getString(R.string.serveMessage, servings);
+
+        // Set the text on views
+        holder.mName.setText(name);
+        holder.mServings.setText(serveString);
     }
 
     @Override

@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.android.baking.adapters.RecipeAdapter;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.fragments.SelectRecipeFragment;
 

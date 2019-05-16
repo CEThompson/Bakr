@@ -155,7 +155,7 @@ public class ViewStepFragment extends Fragment {
         }
     }
 
-    private void updateUI(){
+    public void updateUI(){
         // Set the description
         mInstructionTextView.setText(mStep.getDescription());
 

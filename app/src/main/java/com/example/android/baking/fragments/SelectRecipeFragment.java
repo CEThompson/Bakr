@@ -64,11 +64,11 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
         // TODO set two pane layout switch here
         // Create and set layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-        mRecipeRecyclerView.setLayoutManager(layoutManager);
+        mRecipeRecyclelrView.setLayoutManager(layoutManager);
         mRecipeRecyclerView.setHasFixedSize(true);
 
         // Create the adapter
-        mRecipeAdapter = new RecipeAdapter(this);
+        mRecipeAdapter = new RecipeAdapter(this, getContext());
 
         // Set the adapter on the recycler view
         mRecipeRecyclerView.setAdapter(mRecipeAdapter);

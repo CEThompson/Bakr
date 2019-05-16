@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.baking.R;
+import com.example.android.baking.adapters.IngredientAdapter;
 import com.example.android.baking.adapters.StepAdapter;
+import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
-
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,8 +27,10 @@ import timber.log.Timber;
 public class SelectStepFragment extends Fragment implements StepAdapter.StepOnClickHandler{
 
     @BindView(R.id.step_recyclerview) RecyclerView mStepRecyclerView;
-    @BindView(R.id.ingredients_textview) TextView mIngredientsTv;
+    @BindView(R.id.ingredients_listview)
+    RecyclerView mIngredientsRecyclerView;
     StepAdapter mStepAdapter;
+    IngredientAdapter mIngredientAdapter;
     OnStepClickListener mCallback;
 
 
@@ -60,6 +62,7 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        /* Set the data for the steps */
         // Create and set layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mStepRecyclerView.setLayoutManager(layoutManager);
@@ -71,17 +74,23 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
         // Set the adapter on the recycler view
         mStepRecyclerView.setAdapter(mStepAdapter);
 
+        /* Set the data for the ingredients */
+        LinearLayoutManager ingredientManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        mIngredientsRecyclerView.setLayoutManager(ingredientManager);
+        mIngredientsRecyclerView.setHasFixedSize(true);
+        mIngredientAdapter = new IngredientAdapter(getContext());
+        mIngredientsRecyclerView.setAdapter(mIngredientAdapter);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        // Display ingredients
-        mIngredientsTv.setText(Arrays.toString(mRecipe.getIngredients()));
-
-        // Set the data for the steps and display
+        // Set the data on the recycler views
         mStepAdapter.setmRecipeData(mRecipe.getSteps());
+        mIngredientAdapter.setData(mRecipe.getIngredients());
+
     }
 
     @Override

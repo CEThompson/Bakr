@@ -12,10 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.android.baking.data.Recipe;
-import com.example.android.baking.fragments.SelectRecipeFragment;
 import com.example.android.baking.fragments.SelectStepFragment;
 import com.example.android.baking.fragments.ViewStepFragment;
-import com.example.android.baking.utils.DeviceUtils;
 import com.google.android.exoplayer2.ExoPlayer;
 
 import timber.log.Timber;
@@ -87,8 +85,7 @@ public class StepsActivity extends AppCompatActivity implements
 
         // Swap out the fragment depending upon id
         if (twoPane) {
-            //TODO update the fragment
-            //mViewStepFragment.updateStep();
+            mViewStepFragment.updateUI();
         } else {
             mFragmentManager.beginTransaction()
                     .replace(R.id.steps_single_pane_container, mViewStepFragment)

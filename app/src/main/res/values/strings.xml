@@ -11,4 +11,6 @@
     <!-- Errors -->
     <string name="recipe_error">Error loading recipes.</string>
 
+    <string name="serveMessage">Serves %1$d</string>
+
 </resources>
