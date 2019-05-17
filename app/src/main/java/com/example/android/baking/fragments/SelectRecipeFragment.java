@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.IdlingResource;
 
 import com.example.android.baking.R;
 import com.example.android.baking.RecipeActivity;
@@ -23,6 +25,7 @@ import com.example.android.baking.adapters.RecipeAdapter;
 import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.services.GetRecipesService;
+import com.example.android.baking.test.SimpleIdlingResource;
 import com.example.android.baking.utils.NetworkUtils;
 
 import java.util.ArrayList;
@@ -47,6 +50,18 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
 
     private final static int NUMBER_COLUMNS = 3;
 
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    @VisibleForTesting
+    @Nullable
+    public IdlingResource getIdlingResource(){
+        if (mIdlingResource == null){
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
     public interface OnRecipeClickListener {
         void onRecipeSelected(Recipe recipe);
     }
@@ -66,6 +81,10 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_recipe, container, false);
         ButterKnife.bind(this, view);
+
+        // Set up idling resource for testing
+        getIdlingResource();
+
         return view;
     }
 
@@ -134,12 +153,17 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
                 mRecipeAdapter.setmRecipeData(mRecipes);
                 showRecipes();
                 Timber.d("Retrofit success, Recipe[] length is %s.", response.body().length);
+
+                // Set idling resource for testing
+                if (mIdlingResource!=null) mIdlingResource.setIdleState(true);
             }
             /* Failure shows the error message and logs */
             @Override
             public void onFailure(Call<Recipe[]> call, Throwable t) {
                 showError();
                 Timber.d("Retrofit failure, message is: %s.", t.getMessage());
+
+                if (mIdlingResource!=null) mIdlingResource.setIdleState(true);
             }
         });
     }

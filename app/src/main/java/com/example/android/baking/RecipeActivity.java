@@ -8,12 +8,16 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.IdlingResource;
 
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.fragments.SelectRecipeFragment;
+import com.example.android.baking.test.SimpleIdlingResource;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -33,11 +37,23 @@ public class RecipeActivity extends AppCompatActivity implements
     public static final String RECIPE_KEY = "recipe";
     public static final String SELECT_RECIPE_FRAGMENT_KEY = "select_recipe_fragment";
 
+
+
+    private Timber.DebugTree mDebugTree;
+    public Timber.DebugTree getDebugTree(){
+        if (mDebugTree != null){
+            mDebugTree = new Timber.DebugTree();
+            Timber.plant(mDebugTree);
+        }
+        return mDebugTree;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        // Restore state for rotation, etc.
         if (savedInstanceState!=null){
             mSelectRecipeFragment = (SelectRecipeFragment) getSupportFragmentManager()
                     .getFragment(savedInstanceState, SELECT_RECIPE_FRAGMENT_KEY);
@@ -46,8 +62,7 @@ public class RecipeActivity extends AppCompatActivity implements
 
         // Set up Timber
         if (BuildConfig.DEBUG){
-            if (savedInstanceState==null) // only plant one debug tree
-                Timber.plant(new Timber.DebugTree());
+            getDebugTree();
         }
 
         // Set screen orientation for tablet

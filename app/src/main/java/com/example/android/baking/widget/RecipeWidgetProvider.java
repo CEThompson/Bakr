@@ -1,4 +1,4 @@
-package com.example.android.baking;
+package com.example.android.baking.widget;
 
 import android.appwidget.AppWidgetProvider;
 
