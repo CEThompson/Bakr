@@ -32,6 +32,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
 
     // Butterknife
     implementation 'com.jakewharton:butterknife:10.1.0'
@@ -41,21 +46,21 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    // Image Loading
+    // Picasso - Image Loading
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    // Retrofit Http client
+    // Retrofit - Http client
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
-    // Exo player
+    // Video - Exo player
     implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
 
     // Logger
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Image loading
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    //implementation 'com.github.bumptech.glide:glide:4.9.0'
+    //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
 }
