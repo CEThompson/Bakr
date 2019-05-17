@@ -13,4 +13,8 @@
 
     <string name="serveMessage">Serves %1$d</string>
 
+    <string name="widget_icon">Widget icon.</string>
+
+    <string name="save_a_recipe">Save ingredients to get started!</string>
+
 </resources>

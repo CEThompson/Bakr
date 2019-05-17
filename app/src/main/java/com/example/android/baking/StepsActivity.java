@@ -41,6 +41,7 @@ public class StepsActivity extends AppCompatActivity implements
 
     public static final String SELECT_STEP_FRAGMENT_KEY = "step_fragment";
     public static final String VIEW_STEP_FRAGMENT_KEY = "view_step_fragment";
+    public static final String INGREDIENTS_KEY = "ingredients";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
