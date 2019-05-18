@@ -38,16 +38,6 @@ public class RecipeActivity extends AppCompatActivity implements
     public static final String SELECT_RECIPE_FRAGMENT_KEY = "select_recipe_fragment";
 
 
-
-    private Timber.DebugTree mDebugTree;
-    public Timber.DebugTree getDebugTree(){
-        if (mDebugTree != null){
-            mDebugTree = new Timber.DebugTree();
-            Timber.plant(mDebugTree);
-        }
-        return mDebugTree;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +52,8 @@ public class RecipeActivity extends AppCompatActivity implements
 
         // Set up Timber
         if (BuildConfig.DEBUG){
-            getDebugTree();
+            if (savedInstanceState==null)
+                Timber.plant(new Timber.DebugTree());
         }
 
         // Set screen orientation for tablet

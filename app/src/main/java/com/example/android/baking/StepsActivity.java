@@ -68,11 +68,19 @@ public class StepsActivity extends AppCompatActivity implements
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             Timber.d("Setting two pane to true");
         }
+        // Is not tablet
         else {
             twoPane = false;
             Timber.d("Setting two pane to false");
-        }
 
+            // If not tablet get rid of action bar in landscape mode
+            int orientation = getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+                try{getSupportActionBar().hide();} catch (Exception e){
+                    Timber.d(e);
+                }
+            }
+        }
 
         // Create fragments
         mFragmentManager = getSupportFragmentManager();
