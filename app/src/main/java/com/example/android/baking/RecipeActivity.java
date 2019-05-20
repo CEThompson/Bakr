@@ -5,6 +5,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -68,6 +71,24 @@ public class RecipeActivity extends AppCompatActivity implements
                 .replace(R.id.main_activity_fragment_container, mSelectRecipeFragment)
                 .commit();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.steps_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.ingredients_save_toggle:
+                // TODO save to widget, if already saved remove!
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
