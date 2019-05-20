@@ -149,6 +149,8 @@ public class ViewStepFragment extends Fragment {
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
                     if (playbackState == Player.STATE_READY) showPlayer();
+                    //if (playbackState == Player.STATE_ENDED) showPlayer();
+                    //if (playbackState == Player.STATE_IDLE) //TODO do something when idle
                     if (playbackState == Player.STATE_BUFFERING) showLoading();
                 }
             });

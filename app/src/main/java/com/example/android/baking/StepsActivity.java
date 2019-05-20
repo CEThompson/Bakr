@@ -2,11 +2,15 @@ package com.example.android.baking;
 
 import android.app.AppComponentFactory;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,9 +21,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.fragments.SelectStepFragment;
 import com.example.android.baking.fragments.ViewStepFragment;
+import com.example.android.baking.services.IngredientsWidgetService;
 import com.google.android.exoplayer2.ExoPlayer;
 
 import butterknife.BindView;
@@ -173,11 +179,39 @@ public class StepsActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.ingredients_save_toggle:
-                // TODO save to widget, if already saved remove!
+                saveIngredients();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void saveIngredients(){
+        // Save the ingredients in a shared pref
+        SharedPreferences pref = this.getBaseContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        String savedIngredients = getStringFromIngredients(mRecipe);
+        editor.putString(INGREDIENTS_KEY, savedIngredients);
+        editor.apply();
+
+        // Update the widgets
+        IngredientsWidgetService.startActionUpdateIngredientWidgets(this);
+    }
+
+    public String getStringFromIngredients(Recipe recipe){
+
+        String recipeName = recipe.getName();
+        String servings = getApplicationContext()
+                .getString(R.string.serveMessage, mRecipe.getServings());
+        Ingredient[] ingredients = recipe.getIngredients();
+        String ingredientsString = recipeName + ": (" + servings + ")\n";
+        for (int i = 0; i < ingredients.length; i++){
+            Ingredient current = ingredients[i];
+            String currentString = current.getQuantity() + " " + current.getMeasure() + " " + current.getIngredient();
+            ingredientsString += currentString+"\n";
+        }
+        return ingredientsString;
     }
 
 }

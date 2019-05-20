@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.example.android.baking.R;
@@ -14,12 +15,21 @@ import com.example.android.baking.services.IngredientsWidgetService;
 public class RecipeWidgetProvider extends AppWidgetProvider {
     // TODO implement widget
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId){
+    static void updateAppWidget
+            (Context context,
+             AppWidgetManager appWidgetManager,
+             int appWidgetId,
+             String ingredients){
 
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
 
-        views.setTextViewText(R.id.widget_text, "placeholder text");
+
+        if (ingredients != null) {
+            views.setTextViewText(R.id.widget_text, ingredients);
+            views.setViewVisibility(R.id.widget_text, View.VISIBLE);
+        }
+
 
         // Set listener to start app on widget click
         Intent intent = new Intent(context, RecipeActivity.class);
@@ -38,9 +48,9 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     }
 
     public static void updateIngredientWidgets(Context context, AppWidgetManager appWidgetmanager,
-                                               int[] appWidgetIds){
+                                               int[] appWidgetIds, String ingredients){
         for (int appWidgetId : appWidgetIds){
-            updateAppWidget(context ,appWidgetmanager, appWidgetId);
+            updateAppWidget(context ,appWidgetmanager, appWidgetId, ingredients);
         }
 
     }
