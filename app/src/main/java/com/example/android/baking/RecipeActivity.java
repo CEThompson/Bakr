@@ -74,24 +74,6 @@ public class RecipeActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.steps_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.ingredients_save_toggle:
-                // TODO save to widget, if already saved remove!
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onRecipeSelected(Recipe recipe) {
         Intent intent = new Intent(this, StepsActivity.class);
         intent.putExtra(RECIPE_KEY, recipe); // Send the recipe in bundle

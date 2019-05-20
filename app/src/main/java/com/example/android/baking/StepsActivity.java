@@ -7,6 +7,9 @@ import android.content.res.Configuration;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
@@ -156,6 +159,24 @@ public class StepsActivity extends AppCompatActivity implements
                 getSupportFragmentManager()
                         .putFragment(outState, VIEW_STEP_FRAGMENT_KEY, mViewStepFragment);
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.steps_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.ingredients_save_toggle:
+                // TODO save to widget, if already saved remove!
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
