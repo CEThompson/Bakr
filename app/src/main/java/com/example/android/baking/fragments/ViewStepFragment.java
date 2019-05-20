@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,38 +50,47 @@ public class ViewStepFragment extends Fragment {
     private boolean mPlayWhenReady;
     private int mCurrentWindow;
 
+    private static final String KEY_PLAYBACK_POSITION = "playback_position";
+    private static final String KEY_PLAY_WHEN_READY = "play_when_ready";
+    private static final String KEY_CURRENT_WINDOW ="current_window";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_step, container, false);
         ButterKnife.bind(this, view);
 
-        // Initialize control variables
-        mCurrentWindow = 0;
         mPlaybackPosition = 0;
+        mCurrentWindow = 0;
         mPlayWhenReady = true;
-
-        // If tablet get rid of next buttons
+        if (savedInstanceState!=null){
+            mPlaybackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION);
+            mCurrentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW);
+            mPlayWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
+        }
+        /* If tablet handle here */
         if (getResources().getBoolean(R.bool.is_600_wide)) {
             mNextStepButton.setVisibility(View.GONE);
             mPreviousStepButton.setVisibility(View.GONE);
         }
-        /* Handle view if not fragment */
+        /* If not tablet handle here */
         else {
             int orientation = getResources().getConfiguration().orientation;
 
-            // TODO If landscape set video to take up screen
+            /* If phone is oriented in landscape fill screen with player */
             if (orientation == Configuration.ORIENTATION_LANDSCAPE){
                 ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mPlayerContainer.getLayoutParams();
                 params.width= FrameLayout.LayoutParams.MATCH_PARENT;
                 params.height = FrameLayout.LayoutParams.MATCH_PARENT;
                 mPlayerContainer.setLayoutParams(params);
-                //mMediaPlayerView.setLayoutParams(params);
-                //mExoOverlay.setLayoutParams(params);
+
+                // Hide the nav buttons in landscape
+                mNextStepButton.setVisibility(View.INVISIBLE);
+                mPreviousStepButton.setVisibility(View.INVISIBLE);
             }
-            // Otherwise set by aspect ratio
+            /* Handle phone in portrait orientation */
             else {
-                // TODO set size of video container?
+                // TODO set size of video container in portrait orientation
 
                 // Set back button
                 mNextStepButton.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +124,14 @@ public class ViewStepFragment extends Fragment {
     public void onPause() {
         super.onPause();
         releasePlayer();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_CURRENT_WINDOW, mCurrentWindow);
+        outState.putLong(KEY_PLAYBACK_POSITION, mPlaybackPosition);
+        outState.putBoolean(KEY_PLAY_WHEN_READY, mPlayWhenReady);
     }
 
     private void initializePlayer(){
@@ -157,6 +173,9 @@ public class ViewStepFragment extends Fragment {
             String thumbnail = mStep.getThumbnailURL();
 
             mExoPlayer.stop();
+
+            mCurrentWindow = 0;
+            mPlaybackPosition = 0;
 
             if (!URL.equals("")) {
                 MediaSource mediaSource = buildMediaSource(Uri.parse(URL));
