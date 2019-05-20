@@ -207,17 +207,6 @@ public class ViewStepFragment extends Fragment {
         // Set the description
         mInstructionTextView.setText(mStep.getDescription());
         updatePlayer();
-
-        /*
-        Toast toast;
-        String toastText = "desc: ";
-        if (!videoURL.equals(""))
-            toastText += "+video";
-        if (!thumbnailURL.equals(""))
-            toastText += "+thumb";
-        toast = Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT);
-        toast.show();
-        */
     }
 
     private void showPlayer(){

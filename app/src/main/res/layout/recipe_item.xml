@@ -5,18 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:background="@color/colorPrimary"
+    android:layout_margin="@dimen/medium">
 
     <!-- Recipe Name -->
     <TextView
         android:id="@+id/recipe_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/medium"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/colorWhite"
         tools:text="Cheesecake" />
 
     <!-- Servings -->
@@ -28,9 +30,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/medium"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintVertical_bias="0.5"
+        android:textColor="@color/colorWhite"
         app:layout_constraintStart_toEndOf="@+id/recipe_name_tv"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="serves 8" />
