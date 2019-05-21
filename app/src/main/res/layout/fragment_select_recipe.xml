@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/medium">
 
     <ScrollView
@@ -22,12 +23,52 @@
         android:visibility="visible"
         />
 
-    <TextView
-        android:id="@+id/recipe_errorview"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/recipe_error_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/recipe_error"
+        android:orientation="vertical"
         android:layout_gravity="center"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:padding="@dimen/medium">
+
+        <TextView
+            android:id="@+id/recipe_errorview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_error"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_margin="@dimen/medium"/>
+
+        <TextView
+            android:id="@+id/retrofit_error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/medium"
+            app:layout_constraintTop_toBottomOf="@id/recipe_errorview"/>
+
+        <ImageButton
+            android:id="@+id/retrofit_error_retry_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sync_black_24dp"
+            android:layout_margin="@dimen/medium"/>
+
+        <!--
+        <TextView
+            android:id="@+id/error_retry_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:text="@string/retry"
+            android:visibility="invisible"/>
+    -->
+
+    </LinearLayout>
 
 </FrameLayout>

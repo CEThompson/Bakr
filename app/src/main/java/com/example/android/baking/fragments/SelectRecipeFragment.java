@@ -7,12 +7,15 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,7 +46,9 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
 
     @BindView(R.id.recipe_recyclerview) RecyclerView mRecipeRecyclerView;
     @BindView(R.id.select_recipe_progress_bar) ProgressBar mProgressBar;
-    @BindView(R.id.recipe_errorview) TextView mErrorView;
+    @BindView(R.id.recipe_error_container) LinearLayout mErrorLayout;
+    @BindView(R.id.retrofit_error_retry_button) ImageButton mRetryButton;
+    @BindView(R.id.retrofit_error_message) TextView mErrorMessage;
     private Recipe[] mRecipes;
     private RecipeAdapter mRecipeAdapter;
     private OnRecipeClickListener mCallback;
@@ -84,6 +89,14 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
 
         // Set up idling resource for testing
         getIdlingResource();
+
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoading();
+                getRecipes();
+            }
+        });
 
         return view;
     }
@@ -160,6 +173,7 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
             /* Failure shows the error message and logs */
             @Override
             public void onFailure(Call<Recipe[]> call, Throwable t) {
+                mErrorMessage.setText(t.getMessage());
                 showError();
                 Timber.d("Retrofit failure, message is: %s.", t.getMessage());
 
@@ -179,14 +193,20 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
     private void showRecipes(){
         mProgressBar.setVisibility(View.INVISIBLE);
         mRecipeRecyclerView.setVisibility(View.VISIBLE);
-        mErrorView.setVisibility(View.INVISIBLE);
+        mErrorLayout.setVisibility(View.INVISIBLE);
     }
 
     /* Shows the error view */
     private void showError(){
         mProgressBar.setVisibility(View.INVISIBLE);
         mRecipeRecyclerView.setVisibility(View.INVISIBLE);
-        mErrorView.setVisibility(View.VISIBLE);
+        mErrorLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoading(){
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRecipeRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override
