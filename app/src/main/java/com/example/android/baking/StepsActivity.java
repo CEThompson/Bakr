@@ -82,11 +82,12 @@ public class StepsActivity extends AppCompatActivity implements
             twoPane = false;
             Timber.d("Setting two pane to false");
 
-            // If not tablet get rid of action bar in landscape mode
+            // If its not a tablet and in landscape mode, get rid of the action bar if we are viewing a video
             int orientation = getResources().getConfiguration().orientation;
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE){
-                try{getSupportActionBar().hide();} catch (Exception e){
-                    Timber.d(e);
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                Fragment current = getSupportFragmentManager().findFragmentById(R.id.steps_single_pane_container);
+                if (current instanceof ViewStepFragment) {
+                    try {getSupportActionBar().hide();} catch (Exception e){Timber.d(e);}
                 }
             }
         }
@@ -103,6 +104,9 @@ public class StepsActivity extends AppCompatActivity implements
             mViewStepFragment.setSteps(mRecipe.getSteps());
             mViewStepFragment.setStepPosition(0); // initialize step
         }
+
+        // Set the title of the recipe
+        setTitle(mRecipe.getName());
 
         // Handle set up for one pane or two pane layout
         Timber.d("Two pane is: %s", twoPane);

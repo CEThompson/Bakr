@@ -14,15 +14,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import com.example.android.baking.R;
 import com.example.android.baking.data.Step;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
@@ -52,7 +51,10 @@ public class ViewStepFragment extends Fragment {
 
     private static final String KEY_PLAYBACK_POSITION = "playback_position";
     private static final String KEY_PLAY_WHEN_READY = "play_when_ready";
-    private static final String KEY_CURRENT_WINDOW ="current_window";
+    private static final String KEY_CURRENT_WINDOW = "current_window";
+    private static final String KEY_STEP_POSITION = "step_position";
+
+    private boolean navHidden;
 
     @Nullable
     @Override
@@ -60,39 +62,58 @@ public class ViewStepFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_step, container, false);
         ButterKnife.bind(this, view);
 
+        // For portrait and video landscape
+        navHidden = false;
+
+        // Initialize playback variables
         mPlaybackPosition = 0;
         mCurrentWindow = 0;
         mPlayWhenReady = true;
+
+        // Restore playback variables if necessary
         if (savedInstanceState!=null){
             mPlaybackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION);
             mCurrentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW);
             mPlayWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
+            mStepPosition = savedInstanceState.getInt(KEY_STEP_POSITION);
         }
-        /* If tablet handle here */
+
+        /* If tablet get rid of next and previous buttons */
         if (getResources().getBoolean(R.bool.is_600_wide)) {
-            mNextStepButton.setVisibility(View.GONE);
-            mPreviousStepButton.setVisibility(View.GONE);
+            mPreviousStepButton.setVisibility(View.INVISIBLE);
+            mNextStepButton.setVisibility(View.INVISIBLE);
+            navHidden = true;
         }
+
         /* If not tablet handle here */
         else {
             int orientation = getResources().getConfiguration().orientation;
 
             /* If phone is oriented in landscape fill screen with player */
             if (orientation == Configuration.ORIENTATION_LANDSCAPE){
-                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mPlayerContainer.getLayoutParams();
-                params.width= FrameLayout.LayoutParams.MATCH_PARENT;
-                params.height = FrameLayout.LayoutParams.MATCH_PARENT;
-                mPlayerContainer.setLayoutParams(params);
+                // NOTE: Hide the action bar is checked in activity
 
                 // Hide the nav buttons in landscape
                 mNextStepButton.setVisibility(View.INVISIBLE);
                 mPreviousStepButton.setVisibility(View.INVISIBLE);
+                navHidden = true;
+
+                // Set the resize mode to fill
+                mMediaPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
             }
+
             /* Handle phone in portrait orientation */
             else {
-                // TODO set size of video container in portrait orientation
+                // TODO is there a way to do this without hardcoding?
+                // Resize the player view by aspect ratio and device width
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mMediaPlayerView.getLayoutParams();
+                params.width = getResources().getDisplayMetrics().widthPixels;
+                params.height = params.width * 9 / 16; // 9 /16 is aspect ratio
+                mMediaPlayerView.setLayoutParams(params);
+                Timber.d("Width is %s1, height is %s2", params.width, params.height);
 
-                // Set back button
+
+                // Set up listener for next step button
                 mNextStepButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -100,7 +121,7 @@ public class ViewStepFragment extends Fragment {
                     }
                 });
 
-                // Set next button
+                // Set listener for previous step button
                 mPreviousStepButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -109,7 +130,6 @@ public class ViewStepFragment extends Fragment {
                 });
             }
         }
-
         return view;
     }
 
@@ -132,6 +152,7 @@ public class ViewStepFragment extends Fragment {
         outState.putInt(KEY_CURRENT_WINDOW, mCurrentWindow);
         outState.putLong(KEY_PLAYBACK_POSITION, mPlaybackPosition);
         outState.putBoolean(KEY_PLAY_WHEN_READY, mPlayWhenReady);
+        outState.putInt(KEY_STEP_POSITION, mStepPosition);
     }
 
     private void initializePlayer(){
@@ -139,22 +160,8 @@ public class ViewStepFragment extends Fragment {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext());
 
             mMediaPlayerView.setPlayer(mExoPlayer);
-
             mExoPlayer.setPlayWhenReady(mPlayWhenReady);
             mExoPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
-
-            // Show player when ready
-            mExoPlayer.addListener(new Player.EventListener() {
-                @Override
-                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-                    if (playbackState == Player.STATE_READY) showPlayer();
-                    //if (playbackState == Player.STATE_ENDED) showPlayer();
-                    //if (playbackState == Player.STATE_IDLE) //TODO do something when idle
-                    if (playbackState == Player.STATE_BUFFERING) showLoading();
-                }
-            });
-
         }
 
     }
@@ -171,44 +178,53 @@ public class ViewStepFragment extends Fragment {
 
     private void updatePlayer(){
         if (mExoPlayer!=null) {
+            // Get the relevant urls
             String URL = mStep.getVideoURL();
             String thumbnail = mStep.getThumbnailURL();
 
+            // Stop player and reset positioning
             mExoPlayer.stop();
-
             mCurrentWindow = 0;
             mPlaybackPosition = 0;
 
+            // If there is a video url display it
             if (!URL.equals("")) {
                 MediaSource mediaSource = buildMediaSource(Uri.parse(URL));
-                mExoPlayer.prepare(mediaSource, false, false);
-            } else if (!thumbnail.equals("")){
+                mExoPlayer.prepare(mediaSource, true, false);
+                showPlayer();
+            }
+            // If there is a thumbnail url display it
+            else if (!thumbnail.equals("")){
                 MediaSource mediaSource = buildMediaSource(Uri.parse(thumbnail));
-                mExoPlayer.prepare(mediaSource, false, false);
-            } else {
+                mExoPlayer.prepare(mediaSource, true, false);
+                showPlayer();
+            }
+            // Otherwise indicate that there is neither
+            else {
                 showPlaceholder();
             }
         }
     }
 
+    /* Builds a media source from a uri for exoplayer*/
     private MediaSource buildMediaSource(Uri uri){
         return new ExtractorMediaSource.Factory(
                 new DefaultHttpDataSourceFactory("exoplayer-codelab"))
                 .createMediaSource(uri);
-
     }
 
+    /* Sets the steps for the fragment */
     public void setSteps(Step[] steps){
         mSteps = steps; }
 
+    /* Sets the current step position */
     public void setStepPosition(int position){
         mStepPosition = position;
-        setStep(); }
+        mStep = mSteps[mStepPosition]; }
 
-    private void setStep(){mStep = mSteps[mStepPosition]; }
-
+    /* Increments the step position */
     private void nextStep(){
-        // Only go to next step if within array bounds
+        // Increment only if below last step
         if (mStepPosition < mSteps.length-1){
             mStepPosition++;
             mStep = mSteps[mStepPosition];
@@ -216,7 +232,9 @@ public class ViewStepFragment extends Fragment {
         }
     }
 
+    /* Decrements the step position */
     private void previousStep(){
+        // Step is greater than zero so decrement it
         if (mStepPosition > 0){
             mStepPosition--;
             mStep = mSteps[mStepPosition];
@@ -224,10 +242,25 @@ public class ViewStepFragment extends Fragment {
         }
     }
 
+    /* Sets the instructions, triggers nav control and updates player */
     public void updateUI(){
-        // Set the description
+        // Set the description and update the player
         mInstructionTextView.setText(mStep.getDescription());
+        updateNavButtons();
         updatePlayer();
+    }
+
+    /* Handles the nav buttons depending upon orientation */
+    private void updateNavButtons(){
+        // only handle if flagged
+        if (!navHidden){
+            if (mStepPosition==0) mPreviousStepButton.setVisibility(View.INVISIBLE);
+            else if (mStepPosition == mSteps.length-1) mNextStepButton.setVisibility(View.INVISIBLE);
+            else {
+                mPreviousStepButton.setVisibility(View.VISIBLE);
+                mNextStepButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void showPlayer(){
@@ -246,6 +279,5 @@ public class ViewStepFragment extends Fragment {
         mProgressBar.setVisibility(View.INVISIBLE);
         mMediaPlayerView.setVisibility(View.INVISIBLE);
         mExoOverlay.setVisibility(View.VISIBLE);
-
     }
 }
