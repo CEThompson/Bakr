@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.android.baking.R;
 import com.example.android.baking.data.Step;
@@ -25,9 +26,16 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
+
+import static android.view.View.GONE;
 
 public class ViewStepFragment extends Fragment {
 
@@ -53,6 +61,7 @@ public class ViewStepFragment extends Fragment {
     private static final String KEY_PLAY_WHEN_READY = "play_when_ready";
     private static final String KEY_CURRENT_WINDOW = "current_window";
     private static final String KEY_STEP_POSITION = "step_position";
+    private static final String KEY_STEPS = "steps";
 
     private boolean navHidden;
 
@@ -70,12 +79,19 @@ public class ViewStepFragment extends Fragment {
         mCurrentWindow = 0;
         mPlayWhenReady = true;
 
-        // Restore playback variables if necessary
+        // Restore if there is a saved instance state
         if (savedInstanceState!=null){
             mPlaybackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION);
             mCurrentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW);
             mPlayWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
             mStepPosition = savedInstanceState.getInt(KEY_STEP_POSITION);
+
+            // Recover the steps
+            List<Step> stepList = savedInstanceState.getParcelableArrayList(KEY_STEPS);
+            mSteps = stepList.toArray(new Step[stepList.size()]);
+
+            // Set the current step
+            mStep = mSteps[mStepPosition];
         }
 
         /* If tablet get rid of next and previous buttons */
@@ -91,12 +107,19 @@ public class ViewStepFragment extends Fragment {
 
             /* If phone is oriented in landscape fill screen with player */
             if (orientation == Configuration.ORIENTATION_LANDSCAPE){
-                // NOTE: Hide the action bar is checked in activity
-
+                // Hide the action bar is checked in activity
+                try {((AppCompatActivity) getActivity()).getSupportActionBar().hide();}
+                catch (Exception e) { Timber.d(e); }
+                
                 // Hide the nav buttons in landscape
                 mNextStepButton.setVisibility(View.INVISIBLE);
                 mPreviousStepButton.setVisibility(View.INVISIBLE);
                 navHidden = true;
+
+                if (mSteps[mStepPosition].getVideoURL().isEmpty()
+                && mSteps[mStepPosition].getThumbnailURL().isEmpty()) {
+                    mPlayerContainer.setVisibility(GONE);
+                }
 
                 // Set the resize mode to fill
                 mMediaPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
@@ -153,6 +176,9 @@ public class ViewStepFragment extends Fragment {
         outState.putLong(KEY_PLAYBACK_POSITION, mPlaybackPosition);
         outState.putBoolean(KEY_PLAY_WHEN_READY, mPlayWhenReady);
         outState.putInt(KEY_STEP_POSITION, mStepPosition);
+
+        ArrayList<Step> stepsList = new ArrayList<>(Arrays.asList(mSteps));
+        outState.putParcelableArrayList(KEY_STEPS, stepsList);
     }
 
     private void initializePlayer(){

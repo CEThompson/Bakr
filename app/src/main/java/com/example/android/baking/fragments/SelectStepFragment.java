@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,6 +93,9 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
         mStepAdapter.setmRecipeData(mRecipe.getSteps());
         mIngredientAdapter.setData(mRecipe.getIngredients());
 
+        // When resuming this fragment show the action bar
+        try {((AppCompatActivity) getActivity()).getSupportActionBar().show();}
+        catch (Exception e) { Timber.d(e); }
     }
 
     @Override

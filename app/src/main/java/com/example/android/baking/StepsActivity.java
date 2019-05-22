@@ -81,15 +81,6 @@ public class StepsActivity extends AppCompatActivity implements
         else {
             twoPane = false;
             Timber.d("Setting two pane to false");
-
-            // If its not a tablet and in landscape mode, get rid of the action bar if we are viewing a video
-            int orientation = getResources().getConfiguration().orientation;
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                Fragment current = getSupportFragmentManager().findFragmentById(R.id.steps_single_pane_container);
-                if (current instanceof ViewStepFragment) {
-                    try {getSupportActionBar().hide();} catch (Exception e){Timber.d(e);}
-                }
-            }
         }
 
         // Create fragments
@@ -132,6 +123,7 @@ public class StepsActivity extends AppCompatActivity implements
 
     }
 
+
     @Override
     public void onStepSelected(int position) {
         // Send the selected position to the fragment
@@ -157,17 +149,16 @@ public class StepsActivity extends AppCompatActivity implements
         if (twoPane) {
             getSupportFragmentManager()
                     .putFragment(outState, SELECT_STEP_FRAGMENT_KEY, mSelectStepFragment);
-
             getSupportFragmentManager()
                     .putFragment(outState, VIEW_STEP_FRAGMENT_KEY, mViewStepFragment);
         } else {
             Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.steps_single_pane_container);
             if (currentFrag instanceof SelectStepFragment){
                 getSupportFragmentManager()
-                        .putFragment(outState, SELECT_STEP_FRAGMENT_KEY, mSelectStepFragment);
+                        .putFragment(outState, SELECT_STEP_FRAGMENT_KEY, currentFrag);
             } else if (currentFrag instanceof  ViewStepFragment){
                 getSupportFragmentManager()
-                        .putFragment(outState, VIEW_STEP_FRAGMENT_KEY, mViewStepFragment);
+                        .putFragment(outState, VIEW_STEP_FRAGMENT_KEY, currentFrag);
             }
         }
     }
