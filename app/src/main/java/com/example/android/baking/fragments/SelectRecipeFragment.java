@@ -2,8 +2,6 @@ package com.example.android.baking.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,15 +22,12 @@ import androidx.test.espresso.IdlingResource;
 import com.example.android.baking.R;
 import com.example.android.baking.RecipeActivity;
 import com.example.android.baking.adapters.RecipeAdapter;
-import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.services.GetRecipesService;
 import com.example.android.baking.test.SimpleIdlingResource;
 import com.example.android.baking.utils.NetworkUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +68,7 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        // Set up the callback to the activity here
         try {
             mCallback = (OnRecipeClickListener) context;
         } catch (Exception e){
@@ -90,6 +85,7 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
         // Set up idling resource for testing
         getIdlingResource();
 
+        // If there is an error in loading the recipes the retry button will be shown, set up the listener here
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,7 +209,7 @@ public class SelectRecipeFragment extends Fragment implements RecipeAdapter.Reci
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        /* Save the recipes on rotation BUT only if the async call was successful! */
+        /* Save the recipes on rotation only if the async call was successful! */
         if (mRecipes!=null) {
             ArrayList<Recipe> recipeList = new ArrayList<>();
             for (int i = 0; i < mRecipes.length; i++) {

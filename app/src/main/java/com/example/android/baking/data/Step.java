@@ -1,6 +1,5 @@
 package com.example.android.baking.data;
 
-import android.graphics.Movie;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,8 +11,10 @@ public class Step implements Parcelable {
     private String videoURL;
     private String thumbnailURL;
 
+    // Empty constructor
     public Step(){}
 
+    // Getters and setters
     public int getId() {
         return id;
     }
@@ -23,9 +24,7 @@ public class Step implements Parcelable {
     public String getShortDescription() {
         return shortDescription;
     }
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
+    public void setShortDescription(String shortDescription) { this.shortDescription = shortDescription; }
     public String getDescription() {
         return description;
     }

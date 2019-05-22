@@ -48,9 +48,11 @@ public class IngredientsWidgetService extends IntentService {
 
     private void handleActionUpdateWidgets(){
 
+        // Get the saved ingredients from the shared preferences
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
         String ingredients = preferences.getString(StepsActivity.INGREDIENTS_KEY, null);
 
+        // Update widgets with this string
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
         RecipeWidgetProvider

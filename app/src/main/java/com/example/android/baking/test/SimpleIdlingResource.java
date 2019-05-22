@@ -5,6 +5,7 @@ import androidx.test.espresso.IdlingResource;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/* Defines an idling resource intended to test the recipes after a network call */
 public class SimpleIdlingResource implements IdlingResource {
 
     @Nullable private volatile ResourceCallback mCallback;

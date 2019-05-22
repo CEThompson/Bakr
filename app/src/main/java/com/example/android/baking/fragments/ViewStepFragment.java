@@ -45,7 +45,6 @@ public class ViewStepFragment extends Fragment {
     @BindView(R.id.previous_step) ImageButton mPreviousStepButton;
     @BindView(R.id.player_overlay) ImageView mExoOverlay;
     @BindView(R.id.player_container) FrameLayout mPlayerContainer;
-    @BindView(R.id.video_progress_bar) ProgressBar mProgressBar;
 
     private Step mStep;
     private Step[] mSteps;
@@ -110,7 +109,7 @@ public class ViewStepFragment extends Fragment {
                 // Hide the action bar is checked in activity
                 try {((AppCompatActivity) getActivity()).getSupportActionBar().hide();}
                 catch (Exception e) { Timber.d(e); }
-                
+
                 // Hide the nav buttons in landscape
                 mNextStepButton.setVisibility(View.INVISIBLE);
                 mPreviousStepButton.setVisibility(View.INVISIBLE);
@@ -127,7 +126,7 @@ public class ViewStepFragment extends Fragment {
 
             /* Handle phone in portrait orientation */
             else {
-                // TODO is there a way to do this without hardcoding?
+
                 // Resize the player view by aspect ratio and device width
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mMediaPlayerView.getLayoutParams();
                 params.width = getResources().getDisplayMetrics().widthPixels;
@@ -290,19 +289,11 @@ public class ViewStepFragment extends Fragment {
     }
 
     private void showPlayer(){
-        mProgressBar.setVisibility(View.INVISIBLE);
         mMediaPlayerView.setVisibility(View.VISIBLE);
         mExoOverlay.setVisibility(View.INVISIBLE);
     }
 
-    private void showLoading(){
-        mProgressBar.setVisibility(View.VISIBLE);
-        mMediaPlayerView.setVisibility(View.INVISIBLE);
-        mExoOverlay.setVisibility(View.INVISIBLE);
-    }
-
     private void showPlaceholder(){
-        mProgressBar.setVisibility(View.INVISIBLE);
         mMediaPlayerView.setVisibility(View.INVISIBLE);
         mExoOverlay.setVisibility(View.VISIBLE);
     }

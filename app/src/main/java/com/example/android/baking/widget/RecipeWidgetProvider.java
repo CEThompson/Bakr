@@ -13,8 +13,8 @@ import com.example.android.baking.RecipeActivity;
 import com.example.android.baking.services.IngredientsWidgetService;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
-    // TODO implement widget
 
+    /* Updates an app widget using its id and relevant info */
     static void updateAppWidget
             (Context context,
              AppWidgetManager appWidgetManager,
@@ -24,7 +24,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
 
-
+        // If there are ingredients saved update the text
         if (ingredients != null) {
             views.setTextViewText(R.id.widget_text, ingredients);
             views.setViewVisibility(R.id.widget_text, View.VISIBLE);
@@ -47,6 +47,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     }
 
+    /* Iterates through the list of all the widgest and updates them */
     public static void updateIngredientWidgets(Context context, AppWidgetManager appWidgetmanager,
                                                int[] appWidgetIds, String ingredients){
         for (int appWidgetId : appWidgetIds){

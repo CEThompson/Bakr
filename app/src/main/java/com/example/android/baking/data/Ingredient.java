@@ -14,28 +14,25 @@ public class Ingredient implements Parcelable {
     @SerializedName("ingredient")
     private String ingredient;
 
+    // Empty constructor
     public Ingredient(){}
 
+    // Getters and setters
     public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
     }
-
     public String getIngredient() {
         return ingredient;
     }
-
     public void setMeasure(String measure) {
         this.measure = measure;
     }
-
     public String getMeasure() {
         return measure;
     }
-
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
-
     public double getQuantity() {
         return quantity;
     }

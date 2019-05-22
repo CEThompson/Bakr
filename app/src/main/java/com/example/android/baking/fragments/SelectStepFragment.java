@@ -41,6 +41,7 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        // Set the callback to the activity
         try {
             mCallback = (OnStepClickListener) context;
         } catch (Exception e){
@@ -60,7 +61,7 @@ public class SelectStepFragment extends Fragment implements StepAdapter.StepOnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Restore
+        // Restore the recipe on rotate
         if (savedInstanceState!= null){
             mRecipe = savedInstanceState.getParcelable(RecipeActivity.RECIPE_KEY);
         }

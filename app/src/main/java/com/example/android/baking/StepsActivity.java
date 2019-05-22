@@ -28,7 +28,6 @@ import com.example.android.baking.fragments.ViewStepFragment;
 import com.example.android.baking.services.IngredientsWidgetService;
 import com.google.android.exoplayer2.ExoPlayer;
 
-import butterknife.BindView;
 import timber.log.Timber;
 
 public class StepsActivity extends AppCompatActivity implements
@@ -39,12 +38,6 @@ public class StepsActivity extends AppCompatActivity implements
     private FragmentManager mFragmentManager;
     private SelectStepFragment mSelectStepFragment;
     private ViewStepFragment mViewStepFragment;
-
-    // TODO implement media session
-    private ExoPlayer mExoPlayer;
-    private MediaSession mMediaSession;
-    private NotificationManager mNotificationManager;
-    private PlaybackState.Builder mStateBuilder;
 
     private Recipe mRecipe;
 
@@ -185,7 +178,6 @@ public class StepsActivity extends AppCompatActivity implements
         // Save the ingredients in a shared pref
         SharedPreferences pref = this.getBaseContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-
         String savedIngredients = getStringFromIngredients(mRecipe);
         editor.putString(INGREDIENTS_KEY, savedIngredients);
         editor.apply();
@@ -194,8 +186,8 @@ public class StepsActivity extends AppCompatActivity implements
         IngredientsWidgetService.startActionUpdateIngredientWidgets(this);
     }
 
+    /* Gets a string representing ingredients from a recipe */
     public String getStringFromIngredients(Recipe recipe){
-
         String recipeName = recipe.getName();
         String servings = getApplicationContext()
                 .getString(R.string.serveMessage, mRecipe.getServings());

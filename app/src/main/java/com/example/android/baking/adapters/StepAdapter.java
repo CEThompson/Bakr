@@ -32,8 +32,6 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
             View.OnClickListener{
         @BindView(R.id.step_id) TextView mId;
         @BindView(R.id.step_short_description) TextView mShortDescription;
-       // @BindView(R.id.step_description) TextView mDescription;
-        //@BindView(R.id.video_URL) TextView mVideoURL;
 
         public StepAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,16 +66,9 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
 
         int id = currentStep.getId();
         String shortDescription = currentStep.getShortDescription();
-        //String description = currentStep.getDescription();
-        //String thumbnailURL = currentStep.getThumbnailURL();
-        //String videoURL = currentStep.getVideoURL();
 
         holder.mId.setText(String.valueOf(id));
         holder.mShortDescription.setText(shortDescription);
-        //holder.mDescription.setText(description);
-
-        //holder.mThumbnail.setText(thumbnailURL);
-        //holder.mVideoURL.setText(videoURL);
     }
 
     @Override

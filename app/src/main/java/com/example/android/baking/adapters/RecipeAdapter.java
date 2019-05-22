@@ -1,7 +1,6 @@
 package com.example.android.baking.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.baking.R;
-import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
-import com.example.android.baking.data.Step;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +80,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     @Override
     public int getItemCount() {
-        if (mRecipeData==null)return 0;
+        if (mRecipeData==null) return 0;
         return mRecipeData.length;
     }
 

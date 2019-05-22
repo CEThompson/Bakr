@@ -2,25 +2,16 @@ package com.example.android.baking;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.IdlingResource;
 
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.fragments.SelectRecipeFragment;
-import com.example.android.baking.test.SimpleIdlingResource;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -46,7 +37,7 @@ public class RecipeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        // Restore state for rotation, etc.
+        // Restore fragment state for rotation
         if (savedInstanceState!=null){
             mSelectRecipeFragment = (SelectRecipeFragment) getSupportFragmentManager()
                     .getFragment(savedInstanceState, SELECT_RECIPE_FRAGMENT_KEY);
@@ -55,7 +46,7 @@ public class RecipeActivity extends AppCompatActivity implements
 
         // Set up Timber
         if (BuildConfig.DEBUG){
-            if (savedInstanceState==null)
+            if (savedInstanceState==null) // prevents setting up multiple debug trees which would repeat logs
                 Timber.plant(new Timber.DebugTree());
         }
 
@@ -73,6 +64,7 @@ public class RecipeActivity extends AppCompatActivity implements
 
     }
 
+    /* On selecting a recipe start the steps activity */
     @Override
     public void onRecipeSelected(Recipe recipe) {
         Intent intent = new Intent(this, StepsActivity.class);

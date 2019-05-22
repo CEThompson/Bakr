@@ -13,6 +13,7 @@ public class NetworkUtils {
     private static OkHttpClient client = new OkHttpClient();
     private static GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create();
 
+    /* Sets up the retrofit instance for retrieving the recipes from the network */
     public static Retrofit getRetrofitInstance(){
         if (retrofit==null){
             retrofit = new retrofit2.Retrofit.Builder()
