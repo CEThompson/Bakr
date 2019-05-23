@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,16 +157,28 @@ public class ViewStepFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT>23) initializePlayer(); // Handling API level 24 multi-window support
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        initializePlayer();
+        if (Util.SDK_INT<=23 || mExoPlayer==null) initializePlayer(); // Handling API level 24 multi-window support
         updateUI();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        releasePlayer();
+        if (Util.SDK_INT<=23) releasePlayer(); // Handling API level 24 multi-window support
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT>23) releasePlayer(); // Handling API level 24 multi-window support
     }
 
     @Override
