@@ -7,25 +7,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import androidx.annotation.Nullable;
-
 import com.example.android.baking.RecipeActivity;
-import com.example.android.baking.StepsActivity;
 import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
-import com.example.android.baking.data.Step;
-import com.example.android.baking.fragments.ViewStepFragment;
 import com.example.android.baking.widget.RecipeWidgetProvider;
+import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-public class IngredientsWidgetService extends IntentService {
+import timber.log.Timber;
+
+public class UpdateWidgetService extends IntentService {
 
     public static final String ACTION_UPDATE_INGREDIENT_WIDGETS = "com.example.android.baking.action.update_widgets";
 
-    public IngredientsWidgetService(){
-        super("IngredientsWidgetService");
+    public UpdateWidgetService(){
+        super("UpdateWidgetService");
     }
 
     @Override
@@ -40,7 +37,7 @@ public class IngredientsWidgetService extends IntentService {
     }
 
     public static void startActionUpdateIngredientWidgets(Context context){
-        Intent intent = new Intent(context, IngredientsWidgetService.class);
+        Intent intent = new Intent(context, UpdateWidgetService.class);
         intent.setAction(ACTION_UPDATE_INGREDIENT_WIDGETS);
         context.startService(intent);
     }
@@ -50,17 +47,31 @@ public class IngredientsWidgetService extends IntentService {
 
         // Get the saved ingredients from the shared preferences
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        String ingredients = preferences.getString(StepsActivity.INGREDIENTS_KEY, null);
+        String recipeJson = preferences.getString(RecipeActivity.RECIPE_KEY, null);
+
+        Gson gson = new Gson();
+        Recipe recipe = null;
+
+        if (recipeJson != null) {
+            recipe = gson.fromJson(recipeJson, Recipe.class);
+
+            Timber.d("checking shared pref recipe, recipe is %s", recipe.getName());
+            Ingredient[] ingredients = recipe.getIngredients();
+            for (Ingredient ingredient : ingredients ){
+                Timber.d("Ingredient is %s", ingredient.getIngredient());
+            }
+        } else {
+            Timber.d("checking shared pref recipe, recipe is null");
+        }
 
         // Update widgets with this string
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
-        RecipeWidgetProvider
-                .updateIngredientWidgets(
+        RecipeWidgetProvider.updateIngredientWidgets(
                         this,
                         appWidgetManager,
                         appWidgetIds,
-                        ingredients);
+                        recipe);
     }
 
 

@@ -51,8 +51,6 @@ public class IdlingSelectRecipeScreenTest {
             }
         });
 
-        //onData(anything()).inAdapterView(withId(R.id.recipe_recyclerview)).atPosition(0).perform(click());
-
         /* Perform click on recycler view position 0 after loading from network */
         onView(withId(R.id.recipe_recyclerview)).perform(actionOnItemAtPosition(0, click()));
     }

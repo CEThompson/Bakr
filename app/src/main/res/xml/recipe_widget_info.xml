@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/recipe_widget"
-    android:minHeight="40dp"
-    android:minWidth="40dp"
+    android:initialLayout="@layout/baking_widget"
+    android:minHeight="125dp"
+    android:minWidth="125dp"
     android:previewImage="@drawable/icons8_confectionery_48"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"

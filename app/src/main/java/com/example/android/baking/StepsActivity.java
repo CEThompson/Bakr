@@ -18,7 +18,8 @@ import com.example.android.baking.data.Ingredient;
 import com.example.android.baking.data.Recipe;
 import com.example.android.baking.fragments.SelectStepFragment;
 import com.example.android.baking.fragments.ViewStepFragment;
-import com.example.android.baking.services.IngredientsWidgetService;
+import com.example.android.baking.services.UpdateWidgetService;
+import com.google.gson.Gson;
 
 import timber.log.Timber;
 
@@ -163,38 +164,28 @@ public class StepsActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.ingredients_save_toggle:
-                saveIngredients();
+                saveRecipe();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void saveIngredients(){
+    private void saveRecipe(){
         // Save the ingredients in a shared pref
         SharedPreferences pref = this.getBaseContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        String savedIngredients = getStringFromIngredients(mRecipe);
-        editor.putString(INGREDIENTS_KEY, savedIngredients);
+
+        // Save the recipe as a JSON object to shared preferences
+        Gson gson = new Gson();
+        String recipeJson = gson.toJson(mRecipe);
+        editor.putString(RecipeActivity.RECIPE_KEY, recipeJson);
         editor.apply();
 
         // Update the widgets
-        IngredientsWidgetService.startActionUpdateIngredientWidgets(this);
+        UpdateWidgetService.startActionUpdateIngredientWidgets(this);
     }
 
-    /* Gets a string representing ingredients from a recipe */
-    public String getStringFromIngredients(Recipe recipe){
-        String recipeName = recipe.getName();
-        String servings = getApplicationContext()
-                .getString(R.string.serveMessage, mRecipe.getServings());
-        Ingredient[] ingredients = recipe.getIngredients();
-        String ingredientsString = recipeName + ": (" + servings + ")\n";
-        for (int i = 0; i < ingredients.length; i++){
-            Ingredient current = ingredients[i];
-            String currentString = current.getQuantity() + " " + current.getMeasure() + " " + current.getIngredient();
-            ingredientsString += currentString+"\n";
-        }
-        return ingredientsString;
-    }
+
 
 }

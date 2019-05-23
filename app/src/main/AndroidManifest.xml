@@ -11,6 +11,7 @@
         android:roundIcon="@drawable/icons8_confectionery_96"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".RecipeActivity"
             android:label="@string/title_activity_recipe">
             <intent-filter>
@@ -30,7 +31,9 @@
                 android:value="com.example.android.baking.RecipeActivity"/>
         </activity>
 
-        <service android:name=".services.IngredientsWidgetService"/>
+        <service android:name=".services.UpdateWidgetService"/>
+        <service android:name=".services.WidgetListRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".widget.RecipeWidgetProvider">
             <intent-filter>

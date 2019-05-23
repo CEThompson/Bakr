@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/widget_image_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageView
@@ -14,24 +15,24 @@
             android:src="@drawable/icons8_confectionery_96"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-        <!--
         <ImageView
-            android:id="@+id/widget_add"
-            android:layout_gravity="end|bottom"
-            android:contentDescription="@string/widget_icon"
-            android:src="@drawable/ic_add_circle_black_24dp"
+            android:id="@+id/widget_add_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-            -->
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_add_circle_black_24dp"/>
     </FrameLayout>
 
     <TextView
-        android:id="@+id/widget_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/widget_recipe_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/save_a_recipe"
-        tools:text="2 teaspoons sugar"
-        android:visibility="gone"/>
+        android:textSize="@dimen/text_large"/>
+
+    <ListView
+        android:id="@+id/widget_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

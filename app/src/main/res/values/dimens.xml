@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="extra_small">2dp</dimen>
     <dimen name="small">4dp</dimen>
     <dimen name="medium">8dp</dimen>
     <dimen name="large">12dp</dimen>
 
     <dimen name="button">40dp</dimen>
+
+    <dimen name="text_large">20sp</dimen>
 </resources>
