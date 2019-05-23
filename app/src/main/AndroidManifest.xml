@@ -11,7 +11,8 @@
         android:roundIcon="@drawable/icons8_confectionery_96"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecipeActivity">
+        <activity android:name=".RecipeActivity"
+            android:label="@string/title_activity_recipe">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +20,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".StepsActivity"/>
+        <activity android:name=".StepsActivity"
+            android:label="@string/title_activity_steps"
+            android:parentActivityName=".RecipeActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.baking.RecipeActivity"/>
+        </activity>
 
         <service android:name=".services.IngredientsWidgetService"/>
 

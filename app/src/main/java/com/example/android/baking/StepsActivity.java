@@ -1,22 +1,15 @@
 package com.example.android.baking;
 
-import android.app.AppComponentFactory;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,7 +19,6 @@ import com.example.android.baking.data.Recipe;
 import com.example.android.baking.fragments.SelectStepFragment;
 import com.example.android.baking.fragments.ViewStepFragment;
 import com.example.android.baking.services.IngredientsWidgetService;
-import com.google.android.exoplayer2.ExoPlayer;
 
 import timber.log.Timber;
 
@@ -113,6 +105,10 @@ public class StepsActivity extends AppCompatActivity implements
                         .commit();
             }
         }
+
+        // Set the up button for navigation back to parent activity
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null) actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
 

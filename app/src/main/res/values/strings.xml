@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Baking</string>
 
+    <string name="title_activity_steps">Steps activity</string>
+    <string name="title_activity_recipe">Recipe activity</string>
+
     <!-- Buttons -->
     <string name="next_button">Next step button</string>
     <string name="prev_button">Previous step button</string>
@@ -20,5 +23,6 @@
     <string name="save_ingredients">Save to widget</string>
 
     <string name="retry">Retry</string>
+
 
 </resources>
