@@ -44,13 +44,7 @@ public class IdlingSelectRecipeScreenTest {
 
     @Test
     public void clickRecyclerViewItem_OpensStepsActivity(){
-        mRecipeActivityTestRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-
+        
         /* Perform click on recycler view position 0 after loading from network */
         onView(withId(R.id.recipe_recyclerview)).perform(actionOnItemAtPosition(0, click()));
     }
