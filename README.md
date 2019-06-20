@@ -36,7 +36,7 @@ Third-party libraries were used for implementation of the project:
 * Logger for debug logging
 * Gson for JSON object deserialization
 
-### Fragment
+#### Fragments used to handle mobile and tablet layouts
 This application uses fragments to implement a master/detail list control flow with layouts defined for both mobile and tablet.
 
 ## Acknowledgements
