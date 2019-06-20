@@ -1,6 +1,6 @@
 # Baker
 
-A Udacity project for viewing baking recipes. This project illustrates finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and utilizing third-party libraries.
+A project for viewing baking recipes. This project illustrates finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and utilizing third-party libraries.
 
 ## Installation
 
