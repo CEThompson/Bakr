@@ -1,18 +1,24 @@
-# Bakr
+# Baker
 
-A Udacity student project for viewing baking recipes. This project illustrates finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and utilizing third-party libraries.
+A Udacity project for viewing baking recipes. This project illustrates finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and utilizing third-party libraries.
 
 ## Installation
 
 Clone this repository and import into **Android Studio**
 
-`git clone https://github.com/CEThompson/udacity_baking_app.git`
+`git clone https://github.com/CEThompson/udacity-baker.git`
 
 ## Notable examples
 
+### Espresso
+
+This project utilizes Espresso to handle testing Retrofit 2 network calls with idling resources. The idling resource is defined [here](https://github.com/CEThompson/udacity-baker/blob/master/app/src/main/java/com/example/android/baking/test/SimpleIdlingResource.java) and usage may be examined in the [test](https://github.com/CEThompson/udacity-baker/blob/master/app/src/androidTest/java/com/example/android/baking/IdlingSelectRecipeScreenTest.java). 
+
+Example usage in production code: https://github.com/CEThompson/udacity-baker/blob/4f95d8faee1d489e36eb76f7918b5497375a123a/app/src/main/java/com/example/android/baking/fragments/SelectRecipeFragment.java#L153-L179
+
 ### Usage of MediaPlayer / Exoplayer
 
-This project uses Exoplayer to display steps in baking recipes.
+This project uses Exoplayer to display steps in baking recipes. 
 
 ### Widget
 
@@ -33,9 +39,6 @@ The following libraries were used in executing the project:
 
 The application uses fragments to manage UI implementation.
 
-### Espresso
-
-The application utilizes espresso to handle asynchronous testing with idling resources.
 
 
 
