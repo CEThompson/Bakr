@@ -7,9 +7,6 @@ An example android application for viewing baking recipes. This project illustra
 Clone this repository and import into **Android Studio**.
 `git clone https://github.com/CEThompson/udacity-baker.git`
 
-## Project Overview
-This project is a simple example application that shows a number of popular sandwiches from different countries.
-
 ## Notable examples
 
 #### Testing network calls with Espresso
