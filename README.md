@@ -1,12 +1,14 @@
 # Baker
 
-A project for viewing baking recipes. This project illustrates finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and utilizing third-party libraries.
+An example android application for viewing baking recipes. This project illustrates testing with Espresso, usage of Retrofit 2, implementation of a widget, and using a master/detail control flow for targeting phones and tablets.
 
 ## Installation
 
 Clone this repository and import into **Android Studio**.
-
 `git clone https://github.com/CEThompson/udacity-baker.git`
+
+## Project Overview
+This project is a simple example application that shows a number of popular sandwiches from different countries.
 
 ## Notable examples
 
